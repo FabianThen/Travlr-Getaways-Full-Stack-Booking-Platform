@@ -2,7 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
-
+require('./app_server/models/db');
 const indexRouter = require('./app_server/routes/index');
 const travelRouter = require('./app_server/routes/travel');
 const roomsRouter = require('./app_server/routes/rooms');
