@@ -2,7 +2,8 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
-require('./app_server/models/db');
+require('./app_api/models/db');
+const apiRouter = require('./app_api/routes/index');
 const indexRouter = require('./app_server/routes/index');
 const travelRouter = require('./app_server/routes/travel');
 const roomsRouter = require('./app_server/routes/rooms');
@@ -31,6 +32,7 @@ app.use('/meals', mealsRouter);
 app.use('/news', newsRouter);
 app.use('/about', aboutRouter);
 app.use('/contact', contactRouter);
+app.use('/api', apiRouter);
 
 // Start server
 const PORT = 3000;
