@@ -18,6 +18,10 @@ const app = express();
 app.set('views', path.join(__dirname, 'app_server', 'views'));
 app.set('view engine', 'hbs');
 
+// Body parsing middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -32,7 +36,12 @@ app.use('/meals', mealsRouter);
 app.use('/news', newsRouter);
 app.use('/about', aboutRouter);
 app.use('/contact', contactRouter);
-app.use('/api', apiRouter);
+app.use('/api', (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    next();
+}, apiRouter);
 
 // Start server
 const PORT = 3000;

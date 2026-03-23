@@ -1,0 +1,11 @@
+<div class="row mb-3">
+  <div class="col-12">
+    <button class="btn btn-primary" (click)="addTrip()">Add Trip</button>
+  </div>
+</div>
+<p>Number of trips: {{ trips.length }}</p>
+<div class="row">
+  <div *ngFor="let trip of trips" class="col-md-4">
+    <app-trip-card [trip]="trip" class="card-deck mt-2"></app-trip-card>
+  </div>
+</div>
