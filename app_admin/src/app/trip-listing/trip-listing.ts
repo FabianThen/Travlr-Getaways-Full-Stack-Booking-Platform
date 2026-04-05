@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TripCardComponent } from '../trip-card/trip-card';
 import { TripDataService } from '../services/trip-data';
+import { AuthenticationService } from '../services/authentication';
 import { Trip } from '../models/trip';
 
 @Component({
@@ -20,9 +21,14 @@ export class TripListingComponent implements OnInit {
   constructor(
     private tripDataService: TripDataService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authenticationService: AuthenticationService
   ) {
     console.log('trip-listing constructor');
+  }
+
+  public isLoggedIn(): boolean {
+    return this.authenticationService.isLoggedIn();
   }
 
   public addTrip(): void {
@@ -35,7 +41,7 @@ export class TripListingComponent implements OnInit {
         next: (value: any) => {
           this.trips = value;
           this.cdr.detectChanges();
-          if(value.length > 0) {
+          if (value.length > 0) {
             this.message = 'There are ' + value.length + ' trips available.';
           } else {
             this.message = 'There were no trips retrieved from the database';

@@ -1,6 +1,6 @@
 <div class="row mb-3">
   <div class="col-12">
-    <button class="btn btn-primary" (click)="addTrip()">Add Trip</button>
+    <button *ngIf="isLoggedIn()" class="btn btn-primary" (click)="addTrip()">Add Trip</button>
   </div>
 </div>
 <p>Number of trips: {{ trips.length }}</p>

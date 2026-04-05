@@ -1,8 +1,11 @@
+require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
+const passport = require('passport');
 require('./app_api/models/db');
+require('./app_api/config/passport');
 const apiRouter = require('./app_api/routes/index');
 const indexRouter = require('./app_server/routes/index');
 const travelRouter = require('./app_server/routes/travel');
@@ -24,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
 
 // Register partials
 hbs.registerPartials(path.join(__dirname, 'app_server', 'views', 'partials'));
@@ -38,10 +42,17 @@ app.use('/about', aboutRouter);
 app.use('/contact', contactRouter);
 app.use('/api', (req, res, next) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     next();
 }, apiRouter);
+
+// Catch unauthorized error and create 401
+app.use((err, req, res, next) => {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ message: err.name + ': ' + err.message });
+    }
+});
 
 // Start server
 const PORT = 3000;
