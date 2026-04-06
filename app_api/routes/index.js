@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const tripsController = require('../controllers/trips');
 const authController = require('../controllers/authentication');
 
-// Method to authenticate our JWT
 function authenticateJWT(req, res, next) {
     const authHeader = req.headers['authorization'];
     if (authHeader == null) {
@@ -30,13 +29,12 @@ function authenticateJWT(req, res, next) {
     next();
 }
 
-// Trip routes
 router.get('/trips', tripsController.tripsList);
 router.get('/trips/:tripCode', tripsController.tripsOne);
 router.post('/trips', authenticateJWT, tripsController.tripsAddTrip);
 router.put('/trips/:tripCode', authenticateJWT, tripsController.tripsUpdateTrip);
+router.delete('/trips/:tripCode', authenticateJWT, tripsController.tripsDeleteTrip);
 
-// Auth routes
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 
