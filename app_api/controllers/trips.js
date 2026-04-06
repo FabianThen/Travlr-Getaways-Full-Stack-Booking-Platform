@@ -13,14 +13,11 @@ const tripsList = async (req, res) => {
 };
 
 const tripsOne = async (req, res) => {
-    Trip.find({ 'code': req.params.tripCode }).exec()
-        .then(trip => {
-            if (!trip) {
-                return res.status(404).json({ message: 'Trip not found' });
-            }
-            return res.status(200).json(trip);
-        })
-        .catch(err => res.status(500).json(err));
+    const trip = await Trip.find({ 'code': req.params.tripCode }).exec();
+    if (!trip || trip.length === 0) {
+        return res.status(404).json({ message: 'Trip not found' });
+    }
+    return res.status(200).json(trip);
 };
 
 const tripsAddTrip = async (req, res) => {
@@ -41,8 +38,6 @@ const tripsAddTrip = async (req, res) => {
 };
 
 const tripsUpdateTrip = async (req, res) => {
-    console.log(req.params);
-    console.log(req.body);
     const q = await Trip
         .findOneAndUpdate(
             { 'code': req.params.tripCode },
@@ -58,10 +53,21 @@ const tripsUpdateTrip = async (req, res) => {
             }
         ).exec();
     if (!q) {
-        return res.status(400).json('error');
+        return res.status(404).json({ message: 'Trip not found' });
     } else {
         return res.status(201).json(q);
     }
 };
 
-module.exports = { tripsList, tripsOne, tripsAddTrip, tripsUpdateTrip };
+const tripsDeleteTrip = async (req, res) => {
+    const q = await Trip
+        .findOneAndDelete({ 'code': req.params.tripCode })
+        .exec();
+    if (!q) {
+        return res.status(404).json({ message: 'Trip not found' });
+    } else {
+        return res.status(200).json({ message: 'Trip deleted successfully' });
+    }
+};
+
+module.exports = { tripsList, tripsOne, tripsAddTrip, tripsUpdateTrip, tripsDeleteTrip };
