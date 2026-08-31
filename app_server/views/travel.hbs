@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!-- Website template by freewebsitetemplates.com -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dive Sites - Travlr Getaways</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+    <div id="background">
+        <div id="page">
+            {{> header }}
+            <div id="contents">
+                <div class="box">
+                    <div>
+                        <div class="body">
+                            <h1>Travel</h1>
+                            <ul id="sites">
+                                {{#each trips}}
+                                <li>
+                                    <a href="/api/trips/{{code}}"><img src="/images/{{image}}" alt="Img"></a>
+                                    <h2><a href="/api/trips/{{code}}">{{name}}</a></h2>
+                                    <p>{{description}}</p>
+                                    <p>Resort: {{resort}}</p>
+                                    <p>Length: {{length}}</p>
+                                    <p>From: ${{perPerson}} per person</p>
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{> footer }}
+    </div>
+</body>
+</html>
