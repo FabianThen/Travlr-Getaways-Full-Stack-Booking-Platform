@@ -6,27 +6,20 @@ const authController = require('../controllers/authentication');
 
 function authenticateJWT(req, res, next) {
     const authHeader = req.headers['authorization'];
-    if (authHeader == null) {
-        console.log('Auth Header Required but NOT PRESENT!');
+    if (!authHeader) {
         return res.sendStatus(401);
     }
-    let headers = authHeader.split(' ');
-    if (headers.length < 1) {
-        console.log('Not enough tokens in Auth Header: ' + headers.length);
-        return res.sendStatus(501);
-    }
-    const token = authHeader.split(' ')[1];
-    if (token == null) {
-        console.log('Null Bearer Token');
+    const parts = authHeader.split(' ');
+    if (parts.length !== 2 || parts[0] !== 'Bearer') {
         return res.sendStatus(401);
     }
-    const verified = jwt.verify(token, process.env.JWT_SECRET, (err, verified) => {
+    jwt.verify(parts[1], process.env.JWT_SECRET, (err, verified) => {
         if (err) {
             return res.sendStatus(401);
         }
         req.auth = verified;
+        next();
     });
-    next();
 }
 
 router.get('/trips', tripsController.tripsList);
